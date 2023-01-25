@@ -20,17 +20,21 @@ def sample_pointer():
 
 
 cdef cppclass SamplePointerClassCPP:
-    int* a
+    int* array
     
     SampleClassCPP():
         pass
     
     void alloc():
-        alloc_cpp(&a)
+        alloc_cpp(&array)
     
     void show():
-        show_cpp(&a)
-
+        show_cpp(&array)
+    
+    void add(SamplePointerClassCPP* other):
+        for i in range(5):
+            array[i]+=(other.array)[i]
+    
 
 cdef class SamplePointerClass:
     cdef SamplePointerClassCPP base
@@ -42,3 +46,7 @@ cdef class SamplePointerClass:
     
     def show(self):
         self.base.show()
+
+    def add(self, SamplePointerClass other):
+        self.base.add(&(other.base))
+    
